@@ -7,6 +7,12 @@ try:
 
 	colorama.init()
 
+	mgnt = Fore.MAGENTA
+	grn = Fore.GREEN
+	rd = Fore.RED
+	ylw = Fore.YELLOW
+	wht = Fore.WHITE
+
 	class dirNotContainsSlash(Exception):
 		pass
 
@@ -36,7 +42,7 @@ try:
 				for fls in directory:
 					pyAesCrypt.encryptFile(str(path + fls), str(path + fls) + ".aes", key, bufferSize)
 					os.remove(path + fls)
-					print('{}Файл {} успешно зашифрован!{}'.format(Fore.GREEN, (path + fls) + ".aes", Fore.WHITE))
+					print('{}Файл {} успешно зашифрован!{}'.format(grn, (path + fls) + ".aes", wht))
 			else:
 				raise dirNotContainsSlash()
 		else:	
@@ -44,7 +50,7 @@ try:
 				key = input('Введите ключ шифрования\n>>> ')
 				pyAesCrypt.encryptFile(str(path), str(path) + ".aes", key, bufferSize)
 				os.remove(path)
-				print('\n{}Файл {} успешно зашифрован!{}'.format(Fore.GREEN, path + ".aes", Fore.WHITE))
+				print('\n{}Файл {} успешно зашифрован!{}'.format(grn, path + ".aes", wht))
 			else:
 				raise fileAlreadyCrypted()
 		
@@ -62,7 +68,7 @@ try:
 				for fls in directory:
 					pyAesCrypt.decryptFile(str(path + fls), str(os.path.splitext(path + fls)[0]), key, bufferSize)
 					os.remove(path + fls)
-					print('{}Файл {} успешно расшифрован!{}'.format(Fore.GREEN, path + fls, Fore.WHITE))
+					print('{}Файл {} успешно расшифрован!{}'.format(grn, path + fls, wht))
 			else:
 				raise dirNotContainsSlash()
 		else:	
@@ -70,21 +76,25 @@ try:
 				key = input('Введите ключ шифрования\n>>> ')
 				pyAesCrypt.decryptFile(str(path), str(os.path.splitext(path)[0]), key, bufferSize)
 				os.remove(path)
-				print('\n{}Файл {} успешно расшифрован!{}'.format(Fore.GREEN, path, Fore.WHITE))
+				print('\n{}Файл {} успешно расшифрован!{}'.format(grn, path, wht))
 			else:
 				raise fileAlreadyDecrypted()
 
-	print(Fore.MAGENTA + '''
-██████████████████████████████████████████████████
-█────█────█──█──█────█───█───█────██─███────████─█
-█─██─█─██─██───██─██─██─██─███─██─█──███─██─███──█
-█─████────███─███────██─██───█────██─█████──████─█
-█─██─█─█─████─███─█████─██─███─█─███─███──██████─█
-█────█─█─████─███─█████─██───█─█─███─█─█────█─██─█
-█████████████─████████████████████████████████████
+	print(mgnt + '''
+                                                                     
+  .g8"""bgd                                  mm                      
+.dP'     `M                                  MM                      
+dM'       ` `7Mb,od8 `7M'   `MF'`7MMpdMAo. mmMMmm   .gP"Ya  `7Mb,od8 
+MM            MM' "'   VA   ,V    MM   `Wb   MM    ,M'   Yb   MM' "' 
+MM.           MM        VA ,V     MM    M8   MM    8M""""""   MM     
+`Mb.     ,'   MM         VVV      MM   ,AP   MM    YM.    ,   MM     
+  `"bmmmd'  .JMML.       ,V       MMbmmd'    `Mbmo  `Mbmmd' .JMML.   
+                        ,V        MM                                 
+                     OOb"       .JMML.                            
 
+Версия 1.2.2
 Создано для систем Linux/Termux
-Автор скрипта TG @RubySide''' + Fore.WHITE)
+Автор скрипта TG @RubySide''' + wht)
 
 	choose = input('\nВыберите действие: c/d (зашифровать/дешифровать)\n>>> ')
 
@@ -98,22 +108,22 @@ try:
 		raise selectedActionIsNotExist()	
 
 except EOFError:
-	print('\n{}Выход из программы...{}'.format(Fore.YELLOW, Fore.WHITE))
+	print('\n{}Выход из программы...{}'.format(ylw, wht))
 except KeyboardInterrupt:
-	print('\n\n{}Выход из программы...{}'.format(Fore.YELLOW, Fore.WHITE))
+	print('\n\n{}Выход из программы...{}'.format(ylw, wht))
 except OSError as FileNotFoundError:
-	print('\n{}Ошибка! Файл или директория не найден(-а).{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Файл или директория не найден(-а).{}'.format(rd, wht))
 except ValueError:
-	print('\n{}Ошибка! Введен неверный ключ.{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Введен неверный ключ.{}'.format(rd, wht))
 except dirNotContainsSlash:
-	print('\n{}Ошибка! Каталог должен содержать / на конце.{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Каталог должен содержать / на конце.{}'.format(rd, wht))
 except fileAlreadyCrypted:
-	print('\n{}Ошибка! Файл уже зашифрован.{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Файл уже зашифрован.{}'.format(rd, wht))
 except fileNotCrypted:
-	print('\n{}Ошибка! Файл не зашифрован.{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Файл не зашифрован.{}'.format(rd, wht))
 except fileAlreadyDecrypted:
-	print('\n{}Ошибка! Файл уже расшифрован.{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Файл уже расшифрован.{}'.format(rd, wht))
 except selectedActionIsNotExist:
-	print('\n{}Ошибка! Такого действия не существует.{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Ошибка! Такого действия не существует.{}'.format(rd, wht))
 except Exception:
-	print('\n{}Неизвестная ошибка!{}'.format(Fore.RED, Fore.WHITE))
+	print('\n{}Неизвестная ошибка!{}'.format(rd, wht))

@@ -13,9 +13,6 @@ try:
 	ylw = Fore.YELLOW
 	wht = Fore.WHITE
 
-	class dirNotContainsSlash(Exception):
-		pass
-
 	class fileNotCrypted(Exception):
 		pass
 
@@ -32,25 +29,25 @@ try:
 		bufferSize = 512 * 1024
 
 		if os.path.isdir(path):
-			if path.endswith('/'):
-				directory = os.listdir(path)
-				directory = filter(lambda x: not x.endswith('.aes'), directory)
-				
-				key = input('Введите ключ шифрования\n>>> ')
-				print()
+			if not path.endswith('/'):
+				path += '/'
 
-				for fls in directory:
-					pyAesCrypt.encryptFile(str(path + fls), str(path + fls) + ".aes", key, bufferSize)
-					os.remove(path + fls)
-					print('{}Файл {} успешно зашифрован!{}'.format(grn, (path + fls) + ".aes", wht))
-			else:
-				raise dirNotContainsSlash()
+			directory = os.listdir(path)
+			directory = filter(lambda x: not x.endswith('.aes'), directory)
+				
+			key = input('Введите ключ шифрования >> ')
+			print()
+
+			for fls in directory:
+				pyAesCrypt.encryptFile(str(path + fls), str(path + fls) + ".aes", key, bufferSize)
+				os.remove(path + fls)
+				print('{}[+] Файл {} успешно зашифрован!{}'.format(grn, (path + fls) + ".aes", wht))
 		else:	
 			if not path.endswith('.aes'):
 				key = input('Введите ключ шифрования\n>>> ')
 				pyAesCrypt.encryptFile(str(path), str(path) + ".aes", key, bufferSize)
 				os.remove(path)
-				print('\n{}Файл {} успешно зашифрован!{}'.format(grn, path + ".aes", wht))
+				print('\n{}[+] Файл {} успешно зашифрован!{}'.format(grn, path + ".aes", wht))
 			else:
 				raise fileAlreadyCrypted()
 		
@@ -58,72 +55,68 @@ try:
 		bufferSize = 512 * 1024
 
 		if os.path.isdir(path):
-			if path.endswith('/'):
-				directory = os.listdir(path)
-				directory = filter(lambda x: x.endswith('.aes'), directory)
+			if not path.endswith('/'):
+				path += '/'
 
-				key = input('Введите ключ шифрования\n>>> ')
-				print()
+			directory = os.listdir(path)
+			directory = filter(lambda x: x.endswith('.aes'), directory)
 
-				for fls in directory:
-					pyAesCrypt.decryptFile(str(path + fls), str(os.path.splitext(path + fls)[0]), key, bufferSize)
-					os.remove(path + fls)
-					print('{}Файл {} успешно расшифрован!{}'.format(grn, path + fls, wht))
-			else:
-				raise dirNotContainsSlash()
+			key = input('Введите ключ шифрования >> ')
+			print()
+
+			for fls in directory:
+				pyAesCrypt.decryptFile(str(path + fls), str(os.path.splitext(path + fls)[0]), key, bufferSize)
+				os.remove(path + fls)
+				print('{}[+] Файл {} успешно расшифрован!{}'.format(grn, path + fls, wht))
 		else:	
 			if path.endswith('.aes'):
-				key = input('Введите ключ шифрования\n>>> ')
+				key = input('Введите ключ шифрования >> ')
 				pyAesCrypt.decryptFile(str(path), str(os.path.splitext(path)[0]), key, bufferSize)
 				os.remove(path)
-				print('\n{}Файл {} успешно расшифрован!{}'.format(grn, path, wht))
+				print('\n{}[+] Файл {} успешно расшифрован!{}'.format(grn, path, wht))
 			else:
 				raise fileAlreadyDecrypted()
 
 	print(mgnt + '''
-                                                                     
-  .g8"""bgd                                  mm                      
-.dP'     `M                                  MM                      
-dM'       ` `7Mb,od8 `7M'   `MF'`7MMpdMAo. mmMMmm   .gP"Ya  `7Mb,od8 
-MM            MM' "'   VA   ,V    MM   `Wb   MM    ,M'   Yb   MM' "' 
-MM.           MM        VA ,V     MM    M8   MM    8M""""""   MM     
-`Mb.     ,'   MM         VVV      MM   ,AP   MM    YM.    ,   MM     
-  `"bmmmd'  .JMML.       ,V       MMbmmd'    `Mbmo  `Mbmmd' .JMML.   
-                        ,V        MM                                 
-                     OOb"       .JMML.                            
+   ______                 __           
+  / ____/______  ______  / /____  _____
+ / /   / ___/ / / / __ \/ __/ _ \/ ___/
+/ /___/ /  / /_/ / /_/ / /_/  __/ /    
+\____/_/   \__, / .___/\__/\___/_/     
+          /____/_/                     
+''' 
++ ylw 
++ "\n[*] Версия - 1.3" 
++ "\n[*] Создано для систем Linux/Termux" 
++ "\n[*] Автор скрипта Telegram @RubySide"
++ wht)
 
-Версия 1.2.2
-Создано для систем Linux/Termux
-Автор скрипта TG @RubySide''' + wht)
+	choose = input('\nC/D (зашифровать/дешифровать) >> ')
 
-	choose = input('\nВыберите действие: c/d (зашифровать/дешифровать)\n>>> ')
-
-	if choose == 'c':
-		files = input('Введите путь до шифруемого файла или каталога (пример: /sdcard/path.txt или dir/)\n>>> ')
+	if choose == 'c' or choose == 'C':
+		files = input('Введите путь >> ')
 		crypt(files)
-	elif choose == 'd':
-		files = input('Введите полный путь до дешифруемого файла или каталога (пример: /sdcard/path.txt или dir/)\n>>> ')
+	elif choose == 'd' or choose == 'D':
+		files = input('Введите путь >> ')
 		decrypt(files)
 	else:
 		raise selectedActionIsNotExist()	
 
 except EOFError:
-	print('\n{}Выход из программы...{}'.format(ylw, wht))
+	print('\n{}[*] Выход из программы...{}'.format(ylw, wht))
 except KeyboardInterrupt:
-	print('\n\n{}Выход из программы...{}'.format(ylw, wht))
+	print('\n\n{}[*] Выход из программы...{}'.format(ylw, wht))
 except OSError as FileNotFoundError:
-	print('\n{}Ошибка! Файл или директория не найден(-а).{}'.format(rd, wht))
+	print('\n{}[-] Файл или директория не найден(-а).{}'.format(rd, wht))
 except ValueError:
-	print('\n{}Ошибка! Введен неверный ключ.{}'.format(rd, wht))
-except dirNotContainsSlash:
-	print('\n{}Ошибка! Каталог должен содержать / на конце.{}'.format(rd, wht))
+	print('\n{}[-] Введен неверный ключ.{}'.format(rd, wht))
 except fileAlreadyCrypted:
-	print('\n{}Ошибка! Файл уже зашифрован.{}'.format(rd, wht))
+	print('\n{}[-] Файл уже зашифрован.{}'.format(rd, wht))
 except fileNotCrypted:
-	print('\n{}Ошибка! Файл не зашифрован.{}'.format(rd, wht))
+	print('\n{}[-] Файл не зашифрован.{}'.format(rd, wht))
 except fileAlreadyDecrypted:
-	print('\n{}Ошибка! Файл уже расшифрован.{}'.format(rd, wht))
+	print('\n{}[-] Файл уже расшифрован.{}'.format(rd, wht))
 except selectedActionIsNotExist:
-	print('\n{}Ошибка! Такого действия не существует.{}'.format(rd, wht))
+	print('\n{}[-] Такого действия не существует.{}'.format(rd, wht))
 except Exception:
-	print('\n{}Неизвестная ошибка!{}'.format(rd, wht))
+	print('\n{}[-] Неизвестная ошибка!{}'.format(rd, wht))
